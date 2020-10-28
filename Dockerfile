@@ -1,13 +1,10 @@
-FROM ubuntu:16.04
+FROM debian:buster
 
-MAINTAINER Gábor Somogyi
+RUN apt-get update && \
+    apt-get install -y wget python3 libxcb1 libgl1 qt5-default libnss3
 
-RUN apt-get update
-RUN apt-get install -y wget python xz-utils xdg-utils
-RUN apt-get clean
+RUN wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
 
-RUN wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
-
-WORKDIR /home
+WORKDIR /data
 
 ENTRYPOINT ["ebook-convert"]
